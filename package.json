@@ -1,0 +1,26 @@
+{
+  "name": "passwordmeter",
+  "version": "1.0.0",
+  "description": "Password strength plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomkiernan120/passwordmeter.git"
+  },
+  "keywords": [
+    "javascript",
+    "plugin"
+  ],
+  "author": "Tom Kiernan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomkiernan120/passwordmeter/issues"
+  },
+  "homepage": "https://github.com/tomkiernan120/passwordmeter#readme",
+  "devDependencies": {
+    "babel-minify-webpack-plugin": "^0.3.1"
+  }
+}
