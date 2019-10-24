@@ -2,7 +2,7 @@
   
   Element.prototype.remove = function() {
     this.parentElement.removeChild(this);
-  }
+  };
 
   function passwordmeter(selector, options) {
     this.elements = document.querySelectorAll(selector);
@@ -18,17 +18,17 @@
     
     this.buildHTML();
     this.addEvents();
-  };
+  }
   
   passwordmeter.prototype.buildHTML = function() {
     if( this.elements.length ) {
-      for( var i = 0; i < this.elements.length; i++ ) {
-        var item = this.elements[i];
+      for( let i = 0; i < this.elements.length; i++ ) {
+        const item = this.elements[i];
         
-        var container = document.createElement('div');
+        const container = document.createElement('div');
         container.classList.add( 'strength-container' );
         
-        var progressbar = document.createElement( 'progress' );
+        const progressbar = document.createElement( 'progress' );
         
         progressbar.max = 100;
         progressbar.value = 0;
@@ -44,32 +44,32 @@
 
   passwordmeter.prototype.addEvents = function() {
     if( this.elements.length ) {
-      for( var i = 0; i < this.elements.length; i++ ) {
-        var item = this.elements[i];
+      for( let i = 0; i < this.elements.length; i++ ) {
+        const item = this.elements[i];
         item.addEventListener( 'input', this.testPassword.bind(item, this.options ), false );
         
       }
     }
-  }
+  };
   
   passwordmeter.prototype.testPassword = function( options ) {
-    var regexTests = [
+    const regexTests = [
       /[a-z]+/,
       /[A-Z]+/,
       /[0-9]+/,
       /[$@#&!]+/
     ];
-    var passes = 0;
+    let passes = 0;
   
-    for( var i = 0; i < regexTests.length; i++ ) {
+    for( let i = 0; i < regexTests.length; i++ ) {
       if( regexTests[i].test( this.value ) ) {
         passes++;
       }
     }
     
-    var string = options.weakString;
-    var percent = 0;
-    var color = options.weakColor;
+    let string = options.weakString;
+    let percent = 0;
+    let color = options.weakColor;
     
     if( passes >= 2 && passes < 4 ) {
       string = options.goodString;
@@ -82,18 +82,18 @@
       percent = 100;
     }
     
-    var progressbar = this.parentNode.querySelector('progress');
+    let progressbar = this.parentNode.querySelector('progress');
     
     console.log( progressbar.parentNode );
     
-    var status = progressbar.parentNode.querySelector('p');
+    let status = progressbar.parentNode.querySelector('p');
     
     if( status ) {
       status.remove();  
     }
     
     
-    var status = document.createElement( 'p' );
+    status = document.createElement( 'p' );
     status.innerHTML = "Strength: " + string;
     
     progressbar.parentNode.insertBefore( status, progressbar );
