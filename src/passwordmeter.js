@@ -1,5 +1,5 @@
 ;(function(window, document) {
-  
+    
   Element.prototype.remove = function() {
     this.parentElement.removeChild(this);
   };
@@ -22,30 +22,48 @@
   
   passwordmeter.prototype.buildHTML = function() {
     if( this.elements.length ) {
-      for( let i = 0; i < this.elements.length; i++ ) {
-        const item = this.elements[i];
+      for( var i = 0; i < this.elements.length; i++ ) {
+        var item = this.elements[i];
         
-        const container = document.createElement('div');
+        var container = document.createElement('div');
         container.classList.add( 'strength-container' );
         
-        const progressbar = document.createElement( 'progress' );
+        var progressbar = document.createElement( 'div' );
+        var progressbarInner = document.createElement( 'div' );
+        
+        progressbarInner.style.width = 0;
+        progressbarInner.style.height = "100%";
+        progressbarInner.style.position = "absolute";
+        progressbarInner.style.top = 0;
+        progressbarInner.style.left = 0;
+        progressbarInner.style.backgroundColor = 'red';
+        progressbarInner.style.transition = "all 2s ease";
+        
+        
+        progressbar.appendChild( progressbarInner );
         
         progressbar.max = 100;
         progressbar.value = 0;
-        progressbar.innerHTML = "0";
+        progressbar.low = 33;
+        progressbar.high = 66;
+        progressbar.optimum = 80;
+        progressbar.style.height = '32px';
         progressbar.style.width = "100%";
+        progressbar.style.backgroundColor = "grey";
+        progressbar.style.position = "relative";
         
         container.appendChild( progressbar );
         
         item.parentNode.insertBefore( container, item.nextSibling );
+        
       }
     }
   };
 
   passwordmeter.prototype.addEvents = function() {
     if( this.elements.length ) {
-      for( let i = 0; i < this.elements.length; i++ ) {
-        const item = this.elements[i];
+      for( var i = 0; i < this.elements.length; i++ ) {
+        var item = this.elements[i];
         item.addEventListener( 'input', this.testPassword.bind(item, this.options ), false );
         
       }
@@ -53,23 +71,23 @@
   };
   
   passwordmeter.prototype.testPassword = function( options ) {
-    const regexTests = [
+    var regexTests = [
       /[a-z]+/,
       /[A-Z]+/,
       /[0-9]+/,
       /[$@#&!]+/
     ];
-    let passes = 0;
+    var passes = 0;
   
-    for( let i = 0; i < regexTests.length; i++ ) {
+    for( var i = 0; i < regexTests.length; i++ ) {
       if( regexTests[i].test( this.value ) ) {
         passes++;
       }
     }
     
-    let string = options.weakString;
-    let percent = 0;
-    let color = options.weakColor;
+    var string = options.weakString;
+    var percent = 0;
+    var color = options.weakColor;
     
     if( passes >= 2 && passes < 4 ) {
       string = options.goodString;
@@ -82,24 +100,14 @@
       percent = 100;
     }
     
-    let progressbar = this.parentNode.querySelector('progress');
     
-    console.log( progressbar.parentNode );
+    var container = this.parentNode.querySelector('.strength-container');
+    var progressbar = container.childNodes[0];
+    var progressbarInner = progressbar.childNodes[0];
     
-    let status = progressbar.parentNode.querySelector('p');
+    progressbarInner.style.backgroundColor = color;
+    progressbarInner.style.width = percent + "%";
     
-    if( status ) {
-      status.remove();  
-    }
-    
-    
-    status = document.createElement( 'p' );
-    status.innerHTML = "Strength: " + string;
-    
-    progressbar.parentNode.insertBefore( status, progressbar );
-    
-    progressbar.value = percent;
-    progressbar.style.backgroundColor = color;
   };
   
   window.passwordMeter = passwordmeter;
