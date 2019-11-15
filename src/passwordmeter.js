@@ -3,6 +3,40 @@
   Element.prototype.remove = function() {
     this.parentElement.removeChild(this);
   };
+  
+  var test = function(  ) {
+    var regexTests = [
+      /[a-z]+/,
+      /[A-Z]+/,
+      /[0-9]+/,
+      /[$@#&!]+/
+    ];
+    
+    var passes = 0;
+    
+    for( var i = 0; i < regexTests.length; i++ ) {
+      if( regexTests[i].test( this.value ) ) {
+        passes++;
+      }
+    }
+    
+    var string = options.weakString;
+    var percent = 0;
+    var color = options.weakColor;
+    
+    if( passes >= 2 && passes < 4 ) {
+      string = options.goodString;
+      color = options.goodColor;
+      percent = 50;
+    }
+    else if( passes === 4 ) {
+      string = options.strongString;
+      color = options.strongColor;
+      percent = 100;
+    }
+    
+    return { string, color, percent };
+  }
 
   function passwordmeter(selector, options) {
     this.elements = document.querySelectorAll(selector);
@@ -15,6 +49,10 @@
       strongString: 'Strong',
       strongColor: 'green'
     };
+        
+    if( options.test && {}.toString.call( options.test ) === '[object Function]') {
+      this.options.test = options.test;
+    }
     
     this.buildHTML();
     this.addEvents();
@@ -71,35 +109,7 @@
   };
   
   passwordmeter.prototype.testPassword = function( options ) {
-    var regexTests = [
-      /[a-z]+/,
-      /[A-Z]+/,
-      /[0-9]+/,
-      /[$@#&!]+/
-    ];
-    var passes = 0;
-  
-    for( var i = 0; i < regexTests.length; i++ ) {
-      if( regexTests[i].test( this.value ) ) {
-        passes++;
-      }
-    }
-    
-    var string = options.weakString;
-    var percent = 0;
-    var color = options.weakColor;
-    
-    if( passes >= 2 && passes < 4 ) {
-      string = options.goodString;
-      color = options.goodColor;
-      percent = 50;
-    }
-    else if( passes === 4 ) {
-      string = options.strongString;
-      color = options.strongColor;
-      percent = 100;
-    }
-    
+    const { string, color, percent } = options;
     
     var container = this.parentNode.querySelector('.strength-container');
     var progressbar = container.childNodes[0];
@@ -107,7 +117,6 @@
     
     progressbarInner.style.backgroundColor = color;
     progressbarInner.style.width = percent + "%";
-    
   };
   
   window.passwordMeter = passwordmeter;
